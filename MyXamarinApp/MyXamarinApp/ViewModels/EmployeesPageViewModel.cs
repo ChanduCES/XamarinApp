@@ -13,11 +13,12 @@ namespace MyXamarinApp.ViewModels
         private ObservableRangeCollection<EmployeeModel> _employees;
         private string _employeeName;
         private string _employeeRole;
-        private readonly IBlobStorageService _blobStorageService;
-        public EmployeesPageViewModel(INavigationService navigationService, IBlobStorageService blobStorageService)
+        private readonly IEmployeeService _employeeService;
+
+        public EmployeesPageViewModel(INavigationService navigationService, IEmployeeService employeeService)
             : base(navigationService)
         {
-            _blobStorageService = blobStorageService;
+            _employeeService = employeeService;
             Employees = new ObservableRangeCollection<EmployeeModel>();
             AddCommand = new DelegateCommand(async () => await AddEmployeeCommandHandler());
         }
@@ -64,7 +65,7 @@ namespace MyXamarinApp.ViewModels
         {
             try
             {
-                Employees = new ObservableRangeCollection<EmployeeModel>(await _blobStorageService.GetAllEmployees());
+                Employees = new ObservableRangeCollection<EmployeeModel>(await _employeeService.GetAllEmployees());
             }
             catch (Exception ex)
             {
@@ -74,19 +75,25 @@ namespace MyXamarinApp.ViewModels
 
         private async Task AddEmployeeCommandHandler()
         {
-            if (string.IsNullOrWhiteSpace(EmployeeName) || string.IsNullOrWhiteSpace(EmployeeRole))
+            try
             {
-                return;
+                if (string.IsNullOrWhiteSpace(EmployeeName) || string.IsNullOrWhiteSpace(EmployeeRole))
+                {
+                    return;
+                }
+                EmployeeModel employee = new EmployeeModel
+                {
+                    Name = EmployeeName,
+                    Role = EmployeeRole
+                };
+                var a = await _employeeService.AddEmployee(employee);
+                Employees.ReplaceRange(await _employeeService.GetAllEmployees());
+                EmployeeName = EmployeeRole = string.Empty;
             }
-            var newId = (Employees == null) ? 1 : Employees.Count + 1;
-            EmployeeModel employee = new EmployeeModel
+            catch (Exception ex)
             {
-                EmpId = newId,
-                Name = EmployeeName,
-                Role = EmployeeRole
-            };
-            Employees.Add(employee);
-            await _blobStorageService.AddNewEmployee(Employees);
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

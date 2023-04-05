@@ -9,7 +9,7 @@ namespace MyXamarinApp.API.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        public EmployeeContext _context;
+        private readonly EmployeeContext _context;
         private readonly IMapper _mapper;
 
         public EmployeeRepository(EmployeeContext context, IMapper mapper)
@@ -24,12 +24,12 @@ namespace MyXamarinApp.API.Repository
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 
-        public async Task<int> AddEmployee(EmployeeModel employeeModel)
+        public async Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel)
         {
             var employee = _mapper.Map<Employee>(employeeModel);
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
-            return employee.EmpId;
+            return employeeModel;
         }
     }
 }

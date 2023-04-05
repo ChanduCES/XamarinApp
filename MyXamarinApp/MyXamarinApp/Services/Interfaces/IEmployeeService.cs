@@ -1,10 +1,10 @@
-﻿using MyXamarinApp.API.Models;
+﻿using MyXamarinApp.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MyXamarinApp.API.Repository
+namespace MyXamarinApp.Services.Interfaces
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeService
     {
         Task<List<EmployeeModel>> GetAllEmployees();
         Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel);
