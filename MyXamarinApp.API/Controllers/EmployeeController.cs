@@ -23,7 +23,7 @@ namespace MyXamarinApp.API.Controllers
             return Ok(employees);
         }
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] EmployeeModel employee)
         {
             var newEmployee = await _employeeRepository.AddEmployee(employee);
