@@ -77,7 +77,7 @@ namespace UnitTests.ViewModelTests
         }
 
         [Fact]
-        public void ShouldAddEmployeeToList_WhenAddCommand_IsCalled()
+        public void ShouldAddEmployeeToList_WhenAddEmployeeCommand_IsCalled()
         {
             //Arrange
             var employeePageViewModel = CreateViewModel();
@@ -90,7 +90,7 @@ namespace UnitTests.ViewModelTests
             //Act
             employeePageViewModel.OnNavigatedTo(navigationParameters);
             _employeeServiceMock.Setup(x => x.AddEmployee(It.IsAny<EmployeeModel>())).ReturnsAsync(It.IsAny<EmployeeModel>());
-            employeePageViewModel.AddCommand.Execute();
+            employeePageViewModel.AddEmployeeCommand.Execute();
 
             //Assert
             _employeeServiceMock.Verify(x => x.GetAllEmployees(), Times.Exactly(2));
@@ -99,7 +99,7 @@ namespace UnitTests.ViewModelTests
         }
 
         [Fact]
-        public void ShouldThrowException_WhenAddCommand_IsCalled()
+        public void ShouldThrowException_WhenAddEmployeeCommand_IsCalled()
         {
             //Arrange
             var employeePageViewModel = CreateViewModel();
@@ -114,7 +114,7 @@ namespace UnitTests.ViewModelTests
             //Act
             employeePageViewModel.OnNavigatedTo(navigationParameters);
             _employeeServiceMock.Setup(x => x.AddEmployee(It.IsAny<EmployeeModel>())).Throws(exception);
-            employeePageViewModel.AddCommand.Execute();
+            employeePageViewModel.AddEmployeeCommand.Execute();
 
             //Assert
             _employeeServiceMock.Verify(x => x.GetAllEmployees(), Times.Once);
@@ -123,7 +123,7 @@ namespace UnitTests.ViewModelTests
         }
 
         [Fact]
-        public void ShouldReturnIfNameOrRoleIsEmpty_WhenAddCommand_IsCalled()
+        public void ShouldReturnIfNameOrRoleIsEmpty_WhenAddEmployeeCommand_IsCalled()
         {
             //Arrange
             var employeePageViewModel = CreateViewModel();
@@ -137,12 +137,56 @@ namespace UnitTests.ViewModelTests
 
             //Act
             employeePageViewModel.OnNavigatedTo(navigationParameters);
-            employeePageViewModel.AddCommand.Execute();
+            employeePageViewModel.AddEmployeeCommand.Execute();
 
             //Assert
             employeePageViewModel.Employees.Count().Should().Be(employees.Count());
             _employeeServiceMock.Verify(x => x.GetAllEmployees(), Times.Once);
             _employeeServiceMock.Verify(x => x.AddEmployee(employee), Times.Never);
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void ShouldDeleteEmployeeFromList_WhenDeleteEmployeeCommand_IsCalled()
+        {
+            //Arrange
+            var employeePageViewModel = CreateViewModel();
+            var navigationParameters = new NavigationParameters();
+
+            var employees = _fixture.CreateMany<EmployeeModel>().ToList();
+            var employee = _fixture.Create<EmployeeModel>();
+            _employeeServiceMock.Setup(x => x.GetAllEmployees()).ReturnsAsync(employees);
+            //Act
+            employeePageViewModel.OnNavigatedTo(navigationParameters);
+            _employeeServiceMock.Setup(x => x.RemoveEmployee(employee.EmpId)).ReturnsAsync(true);
+            employeePageViewModel.DeleteEmployeeCommand.Execute(employee);
+
+            //Assert
+            _employeeServiceMock.Verify(x => x.GetAllEmployees(), Times.Exactly(2));
+            _employeeServiceMock.Verify(x => x.RemoveEmployee(employee.EmpId), Times.Once);
+            _mockRepository.VerifyAll();
+        }
+
+        [Fact]
+        public void ShouldThrowException_WhenDeleteEmployeeCommand_IsCalled()
+        {
+            //Arrange
+            var employeePageViewModel = CreateViewModel();
+            var navigationParameters = new NavigationParameters();
+
+            var employees = _fixture.CreateMany<EmployeeModel>().ToList();
+            var employee = _fixture.Create<EmployeeModel>();
+            _employeeServiceMock.Setup(x => x.GetAllEmployees()).ReturnsAsync(employees);
+            var exception = _fixture.Create<Exception>();
+
+            //Act
+            employeePageViewModel.OnNavigatedTo(navigationParameters);
+            _employeeServiceMock.Setup(x => x.RemoveEmployee(employee.EmpId)).Throws(exception);
+            employeePageViewModel.DeleteEmployeeCommand.Execute(employee);
+
+            //Assert
+            _employeeServiceMock.Verify(x => x.GetAllEmployees(), Times.Once);
+            _employeeServiceMock.Verify(x => x.RemoveEmployee(employee.EmpId), Times.Once);
             _mockRepository.VerifyAll();
         }
     }

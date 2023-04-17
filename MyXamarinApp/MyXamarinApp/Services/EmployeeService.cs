@@ -7,6 +7,7 @@ using MyXamarinApp.Models;
 using MyXamarinApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace MyXamarinApp.Services
@@ -41,7 +42,7 @@ namespace MyXamarinApp.Services
             try
             {
                 var employee = (_mapper.Map<EmployeeRequestDTO>(employeeModel));
-                var response = await _flurlClient.Request(AppConstants.GetEmployees)
+                var response = await _flurlClient.Request(AppConstants.AddEmployee)
                     .PostJsonAsync(employee);
                 var newEmployee = await response.GetJsonAsync<EmployeeResponseDTO>();
                 return _mapper.Map<EmployeeModel>(newEmployee);
@@ -51,5 +52,19 @@ namespace MyXamarinApp.Services
                 throw ex;
             }
         }
+        public async Task<bool> RemoveEmployee(int employeeId)
+        {
+            try
+            {
+                var response = await _flurlClient.Request(AppConstants.RemoveEmployee)
+                    .PostJsonAsync(employeeId);
+                return response.StatusCode.Equals(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

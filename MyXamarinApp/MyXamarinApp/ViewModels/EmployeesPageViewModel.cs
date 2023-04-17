@@ -20,10 +20,12 @@ namespace MyXamarinApp.ViewModels
         {
             _employeeService = employeeService;
             Employees = new ObservableRangeCollection<EmployeeModel>();
-            AddCommand = new DelegateCommand(async () => await AddEmployeeCommandHandler());
+            AddEmployeeCommand = new DelegateCommand(async () => await AddEmployeeCommandHandler());
+            DeleteEmployeeCommand = new DelegateCommand<EmployeeModel>(async (emp) => await DeleteEmployeeCommandHandler(emp));
         }
 
-        public DelegateCommand AddCommand { get; }
+        public DelegateCommand AddEmployeeCommand { get; }
+        public DelegateCommand<EmployeeModel> DeleteEmployeeCommand { get; }
 
         public ObservableRangeCollection<EmployeeModel> Employees
         {
@@ -86,7 +88,21 @@ namespace MyXamarinApp.ViewModels
                     Name = EmployeeName,
                     Role = EmployeeRole
                 };
-                var a = await _employeeService.AddEmployee(employee);
+                await _employeeService.AddEmployee(employee);
+                Employees.ReplaceRange(await _employeeService.GetAllEmployees());
+                EmployeeName = EmployeeRole = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private async Task DeleteEmployeeCommandHandler(EmployeeModel employee)
+        {
+            try
+            {
+                await _employeeService.RemoveEmployee(employee.EmpId);
                 Employees.ReplaceRange(await _employeeService.GetAllEmployees());
                 EmployeeName = EmployeeRole = string.Empty;
             }

@@ -3,8 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:extensions="http://xamarin.com/schemas/2020/toolkit"
              xmlns:viewmodels="clr-namespace:MyXamarinApp.ViewModels"
+             xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              xmlns:models="clr-namespace:MyXamarinApp.Models"
+             xmlns:constants="clr-namespace:MyXamarinApp.Constants;assembly=MyXamarinApp"
              x:Class="MyXamarinApp.Views.EmployeesPage"
+             x:Name="employeePage"
              x:DataType="viewmodels:EmployeesPageViewModel"
              Title="{extensions:Translate Employees}">
 
@@ -17,12 +20,19 @@
                 <Entry Placeholder="{extensions:Translate Role}"
                        Text="{Binding EmployeeRole}" />
             </StackLayout>
-            <Button Text="Add" Command="{Binding AddCommand}"/>
+            <Button Text="Add"
+                    Command="{Binding AddEmployeeCommand}"/>
         </StackLayout>
-        <Grid Grid.Row="1" HorizontalOptions="FillAndExpand">
-            <Label Grid.Column="0" Text="Id" />
-            <Label Grid.Column="1" Text="Name" />
-            <Label Grid.Column="2" Text="Role"/>
+        <Grid Grid.Row="1"
+              HorizontalOptions="FillAndExpand"
+              ColumnDefinitions="*,*,*,Auto"
+              Padding="10">
+            <Label Grid.Column="0" 
+                   Text="{extensions:Translate EmpId}" />
+            <Label Grid.Column="1"
+                   Text="{extensions:Translate Name}" />
+            <Label Grid.Column="2"
+                   Text="{extensions:Translate Role}"/>
         </Grid>
         <CollectionView Grid.Row="2" HorizontalOptions="FillAndExpand"
                         ItemsSource="{Binding Employees}">
@@ -31,7 +41,8 @@
                     <StackLayout Orientation="Vertical">
                         <BoxView HeightRequest="1"
                                  BackgroundColor="Gray" />
-                        <Grid>
+                        <Grid Padding="10"
+                              ColumnDefinitions="*,*,*,Auto">
                             <Label Grid.Column="0"
                                    Text="{Binding EmpId}"
                                    TextColor="Black" />
@@ -40,6 +51,15 @@
                             <Label Grid.Column="2"
                                    Text="{Binding Role}"
                                    TextColor="Black" />
+                            <ffimageloadingsvg:SvgCachedImage Grid.Column="3"
+                                                              Aspect="AspectFit"
+                                                              HeightRequest="15"
+                                                              Source="{x:Static constants:AppConstants.DeleteImage}">
+                                <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BindingContext.DeleteEmployeeCommand, Source={x:Reference employeePage}}"
+                                                          CommandParameter="{Binding .}"/>
+                                </ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
+                            </ffimageloadingsvg:SvgCachedImage>
                         </Grid>
                     </StackLayout>
                 </DataTemplate>

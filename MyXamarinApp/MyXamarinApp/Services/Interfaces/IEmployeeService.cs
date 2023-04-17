@@ -8,5 +8,6 @@ namespace MyXamarinApp.Services.Interfaces
     {
         Task<List<EmployeeModel>> GetAllEmployees();
         Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel);
+        Task<bool> RemoveEmployee(int employeeId);
     }
 }

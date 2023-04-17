@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyXamarinApp.API.Models;
 using MyXamarinApp.API.Repository;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyXamarinApp.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
@@ -17,17 +18,24 @@ namespace MyXamarinApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees()
         {
             var employees = await _employeeRepository.GetAllEmployees();
-            return Ok(employees);
+            return employees;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmployee([FromBody] EmployeeModel employee)
+        public async Task<ActionResult<EmployeeModel>> AddEmployee([FromBody] EmployeeModel employee)
         {
             var newEmployee = await _employeeRepository.AddEmployee(employee);
-            return Ok(newEmployee);
+            return newEmployee;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveEmployee([FromBody] int id)
+        {
+            var empId = await _employeeRepository.RemoveEmployee(id);
+            return Ok();
         }
     }
 }
