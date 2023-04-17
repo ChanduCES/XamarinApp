@@ -19,12 +19,21 @@ namespace MyXamarinApp.API.Repository
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Fetches the list of employees from the Employees table.
+        /// </summary>
+        /// <returns>List of employees.</returns>
         public async Task<List<EmployeeModel>> GetAllEmployees()
         {
             var employees = await _context.Employees.ToListAsync();
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 
+        /// <summary>
+        /// Add the new employee to the Employee table.
+        /// </summary>
+        /// <param name="employeeModel">Employee to be added.</param>
+        /// <returns>Employee model of the new Employee.</returns>
         public async Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel)
         {
             var employee = _mapper.Map<Employee>(employeeModel);
@@ -33,12 +42,17 @@ namespace MyXamarinApp.API.Repository
             return employeeModel;
         }
 
-        public async Task<int> RemoveEmployee(int employeeId)
+        /// <summary>
+        /// Removes the employee from the Employee table.
+        /// </summary>
+        /// <param name="employeeId">Employee ID of the employee to be removed.</param>
+        /// <returns>True if employee is removed.</returns>
+        public async Task<bool> RemoveEmployee(int employeeId)
         {
             var employee = _context.Employees.Where(x => x.EmpId.Equals(employeeId)).FirstOrDefault();
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
-            return employeeId;
+            return true;
         }
     }
 }

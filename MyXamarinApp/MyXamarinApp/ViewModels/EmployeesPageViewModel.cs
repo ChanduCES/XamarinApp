@@ -24,9 +24,19 @@ namespace MyXamarinApp.ViewModels
             DeleteEmployeeCommand = new DelegateCommand<EmployeeModel>(async (emp) => await DeleteEmployeeCommandHandler(emp));
         }
 
+        /// <summary>
+        /// Command called when the Add button is clicked.
+        /// </summary>
         public DelegateCommand AddEmployeeCommand { get; }
+
+        /// <summary>
+        /// Command called when the Delete button is clicked.
+        /// </summary>
         public DelegateCommand<EmployeeModel> DeleteEmployeeCommand { get; }
 
+        /// <summary>
+        /// List of Employees to be displayed.
+        /// </summary>
         public ObservableRangeCollection<EmployeeModel> Employees
         {
             get
@@ -39,6 +49,9 @@ namespace MyXamarinApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Name of the new employee to be added.
+        /// </summary>
         public string EmployeeName
         {
             get
@@ -51,6 +64,10 @@ namespace MyXamarinApp.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Role of the new employee to be added.
+        /// </summary>
         public string EmployeeRole
         {
             get
@@ -63,6 +80,10 @@ namespace MyXamarinApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Called when the app navigates to the Employee Page.
+        /// </summary>
+        /// <param name="parameters">Navigation parameters.</param>
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             try
@@ -75,6 +96,10 @@ namespace MyXamarinApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Add the new employee to list by calling the AddEmployee service.
+        /// </summary>
+        /// <returns></returns>
         private async Task AddEmployeeCommandHandler()
         {
             try
@@ -98,6 +123,11 @@ namespace MyXamarinApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Deletes the selected employee by calling the RemoveEmployee service.
+        /// </summary>
+        /// <param name="employee">Employee to be removed.</param>
+        /// <returns></returns>
         private async Task DeleteEmployeeCommandHandler(EmployeeModel employee)
         {
             try

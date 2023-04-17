@@ -8,6 +8,6 @@ namespace MyXamarinApp.API.Repository
     {
         Task<List<EmployeeModel>> GetAllEmployees();
         Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel);
-        Task<int> RemoveEmployee(int employeeId);
+        Task<bool> RemoveEmployee(int employeeId);
     }
 }

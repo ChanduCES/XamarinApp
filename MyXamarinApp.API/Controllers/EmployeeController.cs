@@ -34,7 +34,7 @@ namespace MyXamarinApp.API.Controllers
         [HttpPost]
         public async Task<ActionResult> RemoveEmployee([FromBody] int id)
         {
-            var empId = await _employeeRepository.RemoveEmployee(id);
+            await _employeeRepository.RemoveEmployee(id);
             return Ok();
         }
     }

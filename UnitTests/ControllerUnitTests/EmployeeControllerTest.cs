@@ -73,7 +73,7 @@ namespace UnitTests.ControllerUnitTests
             //Arrange
             var employeeController = CreateEmployeeController();
             var employeeId = _fixture.Create<int>();
-            _employeeRepositoryMock.Setup(x => x.RemoveEmployee(employeeId)).ReturnsAsync(employeeId);
+            _employeeRepositoryMock.Setup(x => x.RemoveEmployee(employeeId)).ReturnsAsync(true);
 
             //Act
             var employeeResult = (OkResult)await employeeController.RemoveEmployee(employeeId);

@@ -54,7 +54,7 @@
                             <ffimageloadingsvg:SvgCachedImage Grid.Column="3"
                                                               Aspect="AspectFit"
                                                               HeightRequest="15"
-                                                              Source="{x:Static constants:AppConstants.DeleteImage}">
+                                                              Source="{x:Static constants:AppConstants.DeleteIcon}">
                                 <ffimageloadingsvg:SvgCachedImage.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding BindingContext.DeleteEmployeeCommand, Source={x:Reference employeePage}}"
                                                           CommandParameter="{Binding .}"/>
