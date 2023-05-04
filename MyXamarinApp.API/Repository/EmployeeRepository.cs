@@ -30,10 +30,10 @@ namespace MyXamarinApp.API.Repository
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 
-        public async Task<List<EmployeeModel>> GetEmployeeById(Guid id)
+        public async Task<EmployeeModel> GetEmployeeById(Guid id)
         {
-            var employees = await _context.Employees.AsNoTracking().Where(x => x.EmployeeGuid.Equals(id)).ToListAsync();
-            return _mapper.Map<List<EmployeeModel>>(employees);
+            var employee = await _context.Employees.AsNoTracking().Where(x => x.EmployeeGuid.Equals(id)).FirstOrDefaultAsync();
+            return _mapper.Map<EmployeeModel>(employee);
         }
 
         /// <summary>
