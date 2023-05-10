@@ -24,9 +24,20 @@ namespace MyXamarinApp.API.Repository
         /// Fetches the list of employees from the Employees table.
         /// </summary>
         /// <returns>List of employees.</returns>
-        public async Task<List<EmployeeModel>> GetAllEmployees()
+        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString)
         {
-            var employees = await _context.Employees.ToListAsync();
+            List<Employee> employees;
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                employees = await _context.Employees.ToListAsync();
+            }
+            else
+            {
+                employees = await _context.Employees.Where(x => x.Name.Contains(searchString) ||
+                                                                x.Role.Contains(searchString) ||
+                                                                x.JoiningDate.ToString().Contains(searchString) ||
+                                                                x.Salary.ToString().Contains(searchString))?.ToListAsync();
+            }
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 

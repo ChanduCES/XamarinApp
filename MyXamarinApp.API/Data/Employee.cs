@@ -11,5 +11,8 @@ namespace MyXamarinApp.API.Data
         public Guid EmployeeGuid { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
+        public DateTime JoiningDate { get; set; }
+        public bool IsActive { get; set; }
+        public double Salary { get; set; }
     }
 }

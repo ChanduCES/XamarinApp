@@ -4,6 +4,7 @@ using MyXamarinApp.API.Models;
 using MyXamarinApp.API.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyXamarinApp.API.Controllers
@@ -19,12 +20,26 @@ namespace MyXamarinApp.API.Controllers
             _employeeRepository = employeeRepository;
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees()
+        //{
+        //    try
+        //    {
+        //        var employees = await _employeeRepository.GetAllEmployees();
+        //        return Ok(employees);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        //    }
+        //}
+
         [HttpGet]
-        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees()
+        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString)
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees();
+                var employees = await _employeeRepository.GetAllEmployees(searchString);
                 return Ok(employees);
             }
             catch (Exception ex)

@@ -21,5 +21,9 @@ namespace MyXamarinApp.API.Models
         /// </summary>
         [Required]
         public string Role { get; set; }
+
+        public DateTime JoiningDate { get; set; }
+        public bool IsActive { get; set; }
+        public string Salary { get; set; }
     }
 }
