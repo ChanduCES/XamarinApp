@@ -70,7 +70,8 @@ namespace MyXamarinApp.API.Repository
             var employee = _mapper.Map<Employee>(employeeModel);
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
-            return _mapper.Map<EmployeeModel>(employee);
+            return await GetEmployeeById(employee.EmployeeGuid);
+
         }
 
         /// <summary>
