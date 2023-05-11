@@ -35,11 +35,11 @@ namespace MyXamarinApp.API.Controllers
         //}
 
         [HttpGet]
-        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString)
+        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString, DateTime initialDate, DateTime finalDate, bool status = true)
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees(searchString);
+                var employees = await _employeeRepository.GetAllEmployees(searchString, initialDate, finalDate, status);
                 return Ok(employees);
             }
             catch (Exception ex)

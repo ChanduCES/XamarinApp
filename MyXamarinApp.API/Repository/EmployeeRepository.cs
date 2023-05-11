@@ -24,19 +24,24 @@ namespace MyXamarinApp.API.Repository
         /// Fetches the list of employees from the Employees table.
         /// </summary>
         /// <returns>List of employees.</returns>
-        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString)
+        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status)
         {
             List<Employee> employees;
+            
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                employees = await _context.Employees.ToListAsync();
+                employees = await _context.Employees.Where(x => x.IsActive.Equals(status)).ToListAsync();
             }
             else
             {
-                employees = await _context.Employees.Where(x => x.Name.Contains(searchString) ||
+                employees = await _context.Employees.Where(x => x.IsActive.Equals(status) &&
+                                                                (x.Name.Contains(searchString) ||
                                                                 x.Role.Contains(searchString) ||
-                                                                x.JoiningDate.ToString().Contains(searchString) ||
-                                                                x.Salary.ToString().Contains(searchString))?.ToListAsync();
+                                                                x.Salary.ToString().Contains(searchString)))?.ToListAsync();
+            }
+            if (initialDate != default && finalDate != default)
+            {
+                employees = employees.Where(x => x.JoiningDate <= finalDate && x.JoiningDate >= initialDate).ToList();
             }
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
