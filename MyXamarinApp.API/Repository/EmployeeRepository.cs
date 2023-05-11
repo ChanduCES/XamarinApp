@@ -49,6 +49,11 @@ namespace MyXamarinApp.API.Repository
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 
+        /// <summary>
+        /// Fetches the employee model for the given Id.
+        /// </summary>
+        /// <param name="id">Id for the employee</param>
+        /// <returns>Employee model with the given Id.</returns>
         public async Task<EmployeeModel> GetEmployeeById(Guid id)
         {
             var employee = await _context.Employees.AsNoTracking().Where(x => x.EmployeeGuid.Equals(id)).FirstOrDefaultAsync();
