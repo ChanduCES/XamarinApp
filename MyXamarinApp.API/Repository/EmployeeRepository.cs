@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyXamarinApp.API.Data;
+using MyXamarinApp.API.Helper;
 using MyXamarinApp.API.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace MyXamarinApp.API.Repository
         /// Fetches the list of employees from the Employees table.
         /// </summary>
         /// <returns>List of employees.</returns>
-        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status)
+        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status, int currentPage, int pageSize)
         {
             List<Employee> employees;
             
@@ -43,6 +44,8 @@ namespace MyXamarinApp.API.Repository
             {
                 employees = employees.Where(x => x.JoiningDate <= finalDate && x.JoiningDate >= initialDate).ToList();
             }
+            employees = MyXamarinAppHelper.ToPagedList(employees, currentPage, pageSize);
+
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 

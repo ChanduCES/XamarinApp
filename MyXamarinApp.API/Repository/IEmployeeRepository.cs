@@ -7,7 +7,7 @@ namespace MyXamarinApp.API.Repository
 {
     public interface IEmployeeRepository
     {
-        Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status);
+        Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status, int currentPage, int pageSize);
         Task<EmployeeModel> GetEmployeeById(Guid id);
         Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel);
         Task<EmployeeModel> UpdateEmployee(EmployeeModel employeeModel);

@@ -20,26 +20,13 @@ namespace MyXamarinApp.API.Controllers
             _employeeRepository = employeeRepository;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees()
-        //{
-        //    try
-        //    {
-        //        var employees = await _employeeRepository.GetAllEmployees();
-        //        return Ok(employees);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        //    }
-        //}
 
         [HttpGet]
-        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString, DateTime initialDate, DateTime finalDate, bool status = true)
+        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString, DateTime initialDate, DateTime finalDate, int currentPage = 1, int pageSize = 10, bool status = true)
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees(searchString, initialDate, finalDate, status);
+                var employees = await _employeeRepository.GetAllEmployees(searchString, initialDate, finalDate, status, currentPage, pageSize);
                 return Ok(employees);
             }
             catch (Exception ex)
