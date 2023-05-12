@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyXamarinApp.API.Data;
-using MyXamarinApp.API.Helper;
 using MyXamarinApp.API.Models;
 using System;
 using System.Collections.Generic;
@@ -31,20 +30,25 @@ namespace MyXamarinApp.API.Repository
             
             if (string.IsNullOrWhiteSpace(searchString))
             {
-                employees = await _context.Employees.Where(x => x.IsActive.Equals(status)).ToListAsync();
+                employees = await _context.Employees.Where(x => x.IsActive.Equals(status))
+                                                    .Skip((currentPage - 1) * pageSize)
+                                                    .Take(pageSize)
+                                                    .ToListAsync();
             }
             else
             {
                 employees = await _context.Employees.Where(x => x.IsActive.Equals(status) &&
                                                                 (x.Name.Contains(searchString) ||
                                                                 x.Role.Contains(searchString) ||
-                                                                x.Salary.ToString().Contains(searchString)))?.ToListAsync();
+                                                                x.Salary.ToString().Contains(searchString)))
+                                                                .Skip((currentPage - 1) * pageSize)
+                                                                .Take(pageSize)?
+                                                                .ToListAsync();
             }
             if (initialDate != default && finalDate != default)
             {
                 employees = employees.Where(x => x.JoiningDate <= finalDate && x.JoiningDate >= initialDate).ToList();
             }
-            employees = MyXamarinAppHelper.ToPagedList(employees, currentPage, pageSize);
 
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
