@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyXamarinApp.API.Migrations
 {
@@ -10,14 +11,13 @@ namespace MyXamarinApp.API.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    EmpId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeGuid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.EmpId);
+                    table.PrimaryKey("PK_Employees", x => x.EmployeeGuid);
                 });
         }
 

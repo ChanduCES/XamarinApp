@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyXamarinApp.API.Models
 {
@@ -7,16 +8,18 @@ namespace MyXamarinApp.API.Models
         /// <summary>
         /// Employee ID of the Employee.
         /// </summary>
-        public int EmpId { get; set; }
+        public Guid EmployeeGuid { get; set; }
 
         /// <summary>
         /// Full name of the Employee.
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// Role of the Employee.
         /// </summary>
+        [Required]
         public string Role { get; set; }
     }
 }
