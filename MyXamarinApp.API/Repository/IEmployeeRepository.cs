@@ -11,6 +11,6 @@ namespace MyXamarinApp.API.Repository
         Task<EmployeeModel> GetEmployeeById(Guid id);
         Task<EmployeeModel> AddEmployee(EmployeeModel employeeModel);
         Task<EmployeeModel> UpdateEmployee(EmployeeModel employeeModel);
-        Task<bool> RemoveEmployee(Guid employeeId);
+        Task<bool> RemoveEmployee(EmployeeModel employee);
     }
 }

@@ -22,11 +22,11 @@ namespace MyXamarinApp.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] string searchString, DateTime initialDate, DateTime finalDate, int currentPage = 1, int pageSize = 10, bool status = true)
+        public async Task<ActionResult<List<EmployeeModel>>> GetAllEmployees([FromQuery] EmployeeQueryParameters parameters)
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees(searchString, initialDate, finalDate, status, currentPage, pageSize);
+                var employees = await _employeeRepository.GetAllEmployees(parameters.SearchString, parameters.InitialDate, parameters.FinalDate, parameters.Status, parameters.CurrentPage, parameters.PageSize);
                 return Ok(employees);
             }
             catch (Exception ex)
@@ -35,11 +35,15 @@ namespace MyXamarinApp.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<List<EmployeeModel>>> GetEmployeeById(Guid id)
         {
             try
             {
+                if (id.Equals(Guid.Empty))
+                {
+                    return NotFound();
+                }
                 var employee = await _employeeRepository.GetEmployeeById(id);
                 if (employee != null)
                 {
@@ -62,7 +66,7 @@ namespace MyXamarinApp.API.Controllers
             try
             {
                 var newEmployee = await _employeeRepository.AddEmployee(employee);
-                if (await _employeeRepository.GetEmployeeById(newEmployee.EmployeeGuid) != null)
+                if (newEmployee?.EmployeeGuid != null)
                 {
                     return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.EmployeeGuid }, newEmployee);
                 }
@@ -88,7 +92,7 @@ namespace MyXamarinApp.API.Controllers
                     var updatedEmployee = await _employeeRepository.UpdateEmployee(employee);
                     if (updatedEmployee != null)
                     {
-                        return NoContent();
+                        return Ok();
                     }
                     else
                     {
@@ -111,10 +115,11 @@ namespace MyXamarinApp.API.Controllers
         {
             try
             {
-                if ((await _employeeRepository.GetEmployeeById(id)) != null)
+                var employee = await _employeeRepository.GetEmployeeById(id);
+                if (employee != null)
                 {
-                    await _employeeRepository.RemoveEmployee(id);
-                    return Ok();
+                    await _employeeRepository.RemoveEmployee(employee);
+                    return NoContent();
                 }
                 else
                 {
