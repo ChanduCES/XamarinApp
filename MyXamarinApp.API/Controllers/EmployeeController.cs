@@ -26,7 +26,7 @@ namespace MyXamarinApp.API.Controllers
         {
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees(parameters.SearchString, parameters.InitialDate, parameters.FinalDate, parameters.Status, parameters.CurrentPage, parameters.PageSize);
+                var employees = await _employeeRepository.GetAllEmployees(parameters);
                 return Ok(employees);
             }
             catch (Exception ex)

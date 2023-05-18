@@ -24,18 +24,18 @@ namespace MyXamarinApp.API.Repository
         /// Fetches the list of employees from the Employees table.
         /// </summary>
         /// <returns>List of employees.</returns>
-        public async Task<List<EmployeeModel>> GetAllEmployees(string searchString, DateTime initialDate, DateTime finalDate, bool status, int currentPage, int pageSize)
+        public async Task<List<EmployeeModel>> GetAllEmployees(EmployeeQueryParameters parameters)
         {
             List<Employee> employees = await _context.Employees.Where(x =>
-                                                                    x.IsActive.Equals(status) &&
-                                                                    (string.IsNullOrWhiteSpace(searchString) ||
-                                                                    x.Name.Contains(searchString) ||
-                                                                    x.Role.Contains(searchString) ||
-                                                                    x.Salary.ToString().Contains(searchString)) &&
-                                                                    (initialDate == default || x.JoiningDate >= initialDate) &&
-                                                                    (finalDate == default || x.JoiningDate <= finalDate)).ToListAsync();
+                                                                    x.IsActive.Equals(parameters.Status) &&
+                                                                    (string.IsNullOrWhiteSpace(parameters.SearchString) ||
+                                                                    x.Name.Contains(parameters.SearchString) ||
+                                                                    x.Role.Contains(parameters.SearchString) ||
+                                                                    x.Salary.ToString().Contains(parameters.SearchString)) &&
+                                                                    (parameters.InitialDate == default || x.JoiningDate >= parameters.InitialDate) &&
+                                                                    (parameters.FinalDate == default || x.JoiningDate <= parameters.FinalDate)).ToListAsync();
 
-            employees = employees.Skip((currentPage - 1) * pageSize).Take(pageSize)?.ToList();
+            employees = employees.Skip((parameters.CurrentPage - 1) * parameters.PageSize).Take(parameters.PageSize)?.ToList();
             return _mapper.Map<List<EmployeeModel>>(employees);
         }
 
