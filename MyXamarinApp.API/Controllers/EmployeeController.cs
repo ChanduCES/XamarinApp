@@ -40,10 +40,6 @@ namespace MyXamarinApp.API.Controllers
         {
             try
             {
-                if (id.Equals(Guid.Empty))
-                {
-                    return NotFound();
-                }
                 var employee = await _employeeRepository.GetEmployeeById(id);
                 if (employee != null)
                 {
