@@ -41,7 +41,7 @@ namespace MyXamarinApp.API.Controllers
             try
             {
                 var employee = await _employeeRepository.GetEmployeeById(id);
-                if (employee != null)
+                if (employee?.EmployeeGuid != null)
                 {
                     return Ok(employee);
                 }
